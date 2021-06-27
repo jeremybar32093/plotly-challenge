@@ -102,9 +102,81 @@ function updateTop10BarChart(subjectID) {
 
     // Render the plot to the div tag with id "plot"
     Plotly.newPlot("bar", data, layout);
-    
-    return top10Array;
-    
+        
+};
 
-    
+// 4.) Function to create gauge chart based on selected subject ID
+function updateGaugeChart(subjectID) {
+    //4a). Filter on subjectID passed in to be used to read in proper metadata attributes
+    // Filter function comes back as list, so need to just pull 0 index
+    var filteredMetadata = subjectMetadata.filter((row) => row.id === subjectID)[0];
+
+    var scrubsPerWeek = filteredMetadata.wfreq;
+
+    // 4b.) Update plotly gauge chart - update ticks if possible
+    // Adapted from https://plotly.com/javascript/gauge-charts/
+    var data = [
+        {
+          domain: { x: [0, 1], y: [0, 1] },
+          value: scrubsPerWeek, // **to be dynamic**
+          title: { text: "Belly Button Washing Frequency" },
+          type: "indicator",
+          mode: "gauge",
+          gauge: {
+            axis: { range: [null, 9] },
+            steps: [
+              { range: [0, 1], color: "#f4f8f8"},
+              { range: [1, 2], color: "#e9f2f2" },
+              { range: [2, 3], color: "#d4e6e5" },
+              { range: [3, 4], color: "#bed9d8" },
+              { range: [4, 5], color: "#a8cccd" },
+              { range: [5, 6], color: "#92bfc0" },
+              { range: [6, 7], color: "#7bb4b3" },
+              { range: [7, 8], color: "#64a6a6" },
+              { range: [8, 9], color: "#4b9a9a" },
+            ],
+            threshold: {
+              line: { color: "purple", width: 10 },
+              thickness: 0.75,
+              value: scrubsPerWeek //**to be dynamic** 
+            }
+          }
+        }
+      ];
+      
+      var layout = { width: 600, height: 450, margin: { t: 0, b: 0 } };
+      Plotly.newPlot('gauge', data, layout);
+};
+
+// 5.) Function to update bubble chart based on selected subjectID
+function updateBubbleChart(subjectID) {
+    // 5a.) Filter samples on appropriate subject ID
+    // NOTE: use parseInt() because within samples, row id is stored as string 
+    var filteredSamples = samples.filter((row) => parseInt(row.id) === subjectID)[0];
+
+    // 5b.) Create trace and new plotly object
+    var bubbleChartTrace = {
+        x: filteredSamples.otu_ids,
+        y: filteredSamples.sample_values,
+        text: filteredSamples.otu_labels,
+        mode:'markers',
+        marker:{
+            color: filteredSamples.otu_ids,
+            size: filteredSamples.sample_values,
+        }
+    };
+
+    var data = [bubbleChartTrace];
+
+    var layout = {
+        title: 'Sample Values by OTU ID',
+        showlegend: false,
+        xaxis: {
+            title: {
+                text: "OTU ID"
+            }       
+        }
+    };
+
+    Plotly.newPlot('bubble', data, layout);
 };
