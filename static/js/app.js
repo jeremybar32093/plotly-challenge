@@ -3,7 +3,7 @@
 var names;
 var subjectMetadata;
 var samples;
-
+var selectedSubjectID;
 
 // 1.) Read in dataset using d3.json() and create variables to be used downstream
 d3.json("data/samples.json").then((incomingData) => {
@@ -22,6 +22,10 @@ d3.json("data/samples.json").then((incomingData) => {
 
     // 1d.) Read in subject samples
     samples = incomingData.samples;
+
+    // Call function to update all graphs after initial load - same function executed for "onchange" event on selector dropdown
+    // defined at end of script
+    handleChange();
 });
 
 //2.) Function to update demographic info based on selected subject ID
@@ -180,3 +184,22 @@ function updateBubbleChart(subjectID) {
 
     Plotly.newPlot('bubble', data, layout);
 };
+
+// Define handleChange function for when user changes selected subject ID
+function handleChange() {
+    // Use ID defined on select tag to pull dropdown value
+    var dropDownMenu = d3.select("#selectData");
+    selectedSubjectID = parseInt(dropDownMenu.property("value"));
+    
+    // Call all functions to update graphs
+    updateDemographicInfo(selectedSubjectID);
+    updateGaugeChart(selectedSubjectID);
+    updateTop10BarChart(selectedSubjectID);
+    updateBubbleChart(selectedSubjectID);
+
+    // console.log(selectedSubjectID);
+
+};
+
+// Add event listener for changing subject ID - call all functions to refresh graphs
+d3.selectAll("#selectData").on("change", handleChange);
