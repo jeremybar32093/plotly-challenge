@@ -27,9 +27,8 @@
             <!-- dropdown selector/demographic info tile -->
             <div class="p-1 mb-1 bg-light rounded-3">
                 <h6>Test Subject ID No.:</h6>
-                <!-- Placeholder html - options will be updated dynamically based on data -->
+                <!-- Placeholder html - options will be updated dynamically based on data using app.js -->
                 <select class="form-select" aria-label="Default select example">
-                    <option selected>Select a Subject ID</option>
                 </select>    
             </div>
             <div class="card border-primary">
@@ -38,13 +37,13 @@
                 </div>
                 <div class="card-body">
                   <!-- Placeholder for metadata on selected id - will be updated dynamically in js file -->
-                  <p class="card-text">ID: <span>[ID]</span></p>
-                  <p class="card-text">ETHNICITY: <span>[Etnicity]</span></p>
-                  <p class="card-text">GENDER: <span>[Gender]</span></p>
-                  <p class="card-text">AGE: <span>[Age]</span></p>
-                  <p class="card-text">LOCATION: <span>[Location]</span></p>
-                  <p class="card-text">BBTYPE: <span>[BBType]</span></p>
-                  <p class="card-text">WFREQ: <span>[Wfreq]</span></p>
+                  <p class="card-text">ID: <span id="subjectID">[ID]</span></p>
+                  <p class="card-text">ETHNICITY: <span id="subjectEthnicity">[Etnicity]</span></p>
+                  <p class="card-text">GENDER: <span id="subjectGender">[Gender]</span></p>
+                  <p class="card-text">AGE: <span id="subjectAge">[Age]</span></p>
+                  <p class="card-text">LOCATION: <span id="subjectLocation">[Location]</span></p>
+                  <p class="card-text">BBTYPE: <span id="subjectBBType">[BBType]</span></p>
+                  <p class="card-text">WFREQ: <span id="subjectWFreq">[Wfreq]</span></p>
                 </div>
             </div>          
         </div>
