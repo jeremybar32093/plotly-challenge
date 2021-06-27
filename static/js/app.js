@@ -2,9 +2,10 @@
 //    Will be read in with d3.json, but used in subsequent downstream functions
 var names;
 var subjectMetadata;
+var samples;
 
 
-// 1.) Read in dataset using d3.json()
+// 1.) Read in dataset using d3.json() and create variables to be used downstream
 d3.json("data/samples.json").then((incomingData) => {
     // 1a.) Create list of Subject IDs to include in dropdown list
     names = incomingData.names;
@@ -18,14 +19,17 @@ d3.json("data/samples.json").then((incomingData) => {
 
     // 1c.) Read in subject metadata to be used for updating demographic info card
     subjectMetadata = incomingData.metadata;
+
+    // 1d.) Read in subject samples
+    samples = incomingData.samples;
 });
 
-//2. Function to update demographic info based on selected subject ID
+//2.) Function to update demographic info based on selected subject ID
 function updateDemographicInfo(subjectID) {
-    //2b. Filter on subjectID passed in to be used to read in proper metadata attributes
+    //2a). Filter on subjectID passed in to be used to read in proper metadata attributes
     // Filter function comes back as list, so need to just pull 0 index
     var filteredMetadata = subjectMetadata.filter((row) => row.id === subjectID)[0];
-    //2a. Use D3 to read in span IDs and update text property
+    //2b). Use D3 to read in span IDs and update text property
         // subject ID #
     var subjectID = d3.select("#subjectID");
     subjectID.property("textContent",filteredMetadata.id);
@@ -47,4 +51,60 @@ function updateDemographicInfo(subjectID) {
         // subject wfreq
     var subjectWFreq = d3.select("#subjectWFreq");
     subjectWFreq.property("textContent", filteredMetadata.wfreq);
+};
+
+// 3. Function to create top 10 bar chart based on select subject ID
+function updateTop10BarChart(subjectID) {
+    // 3a.) Filter samples on appropriate subject ID
+    // NOTE: use parseInt() because within samples, row id is stored as string 
+    var filteredSamples = samples.filter((row) => parseInt(row.id) === subjectID)[0];
+    
+    // 3b.) Create separate array that can be sorted and facilitated into top 10 bar chart
+    var sortArray = [];
+        // loop through length of otu_ids
+        // use regular loop syntax rather than forEach because for each otu_id need to add corresponding index of sample value
+    for(i=0; i < filteredSamples.otu_ids.length; i++) {
+        // declare empty dictionary to be appended into array defined above
+        var sortArrayDict = {};
+        // Add key value pair = matching indexes of otu_ids and sample values
+        sortArrayDict["otu_id"] = filteredSamples.otu_ids[i];
+        sortArrayDict["sample_value"] = filteredSamples.sample_values[i];
+        // Append to sortArray defined above
+        sortArray.push(sortArrayDict);
+    };
+
+    // 3c.) Sort array created from loop above and slice to obtain top 10
+    var sortArrayFinal = sortArray.sort((a, b) => b.sample_value - a.sample_value);
+    var top10Array = sortArrayFinal.slice(0, 10);
+    // Reverse the array to accommodate Plotly's defaults
+    reversedData = top10Array.reverse();
+    
+    // 3d.) Create trace and new plotly object
+    var barChartTrace = {
+        x: reversedData.map(object => object.sample_value),
+        y: reversedData.map(object => `OTU ${object.otu_id}`),
+        name: `Subject ID ${subjectID}`,
+        type: "bar",
+        orientation: "h"
+    }
+
+    var data = [barChartTrace];
+
+    var layout = {
+        title: "Top 10 Bacteria Cultures Found",
+        margin: {
+          l: 100,
+          r: 100,
+          t: 100,
+          b: 100
+        }
+      };
+
+    // Render the plot to the div tag with id "plot"
+    Plotly.newPlot("bar", data, layout);
+    
+    return top10Array;
+    
+
+    
 };
