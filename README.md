@@ -11,3 +11,5 @@ Plotly compontents and dynamic html logic was created in the **app.js** file loc
 
 The final dashboard will end up looking like the following:
 
+![Dashboard Sample](images/dashboard-sample.png)
+
