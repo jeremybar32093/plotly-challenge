@@ -123,11 +123,11 @@ function updateGaugeChart(subjectID) {
         {
           domain: { x: [0, 1], y: [0, 1] },
           value: scrubsPerWeek, // **to be dynamic**
-          title: { text: "Belly Button Washing Frequency" },
+          title: { text: "<em>Belly Button Washing Frequency</em><br><span>Scrubs per week</span>" },
           type: "indicator",
           mode: "gauge",
           gauge: {
-            axis: { range: [null, 9] },
+            axis: { range: [null, 9], tickwidth: 2, tickmode: 'linear' },
             steps: [
               { range: [0, 1], color: "#f4f8f8"},
               { range: [1, 2], color: "#e9f2f2" },
