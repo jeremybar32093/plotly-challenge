@@ -1,6 +1,6 @@
 # plotly-challenge
 
-This repository uses *javascript* and *plotly* to create a dashboard from a dataset containing information about bacteria cultures from belly button swabs. It can be accessed via (**this URL - update URL once deployed**). The dashboard features a selector to choose a particular test subject ID, then elmements that update dynamically based on the selected subject ID. These dynamic elements were built using *plotly*, and are as follows:
+This repository uses *javascript* and *plotly* to create a dashboard from a dataset containing information about bacteria cultures from belly button swabs. It can be accessed via [this url](https://jeremybar32093.github.io/plotly-challenge/index.html). The dashboard features a selector to choose a particular test subject ID, then elmements that update dynamically based on the selected subject ID. These dynamic elements were built using *plotly*, and are as follows:
 
 * [Bar Chart](https://plotly.com/javascript/bar-charts/) featuring top 10 OTU IDs (bacteria types) based on selected test subject
 * [Gauge Chart](https://plotly.com/javascript/gauge-charts/) displaying number of belly button scrubs per week based on selected test subject
